@@ -20,7 +20,6 @@ def hetero_euchro_measures(regionmask: np.ndarray, intensity: np.ndarray, alpha:
 
     feat = {
         "i80_i20": high / low,
-        "nhigh_nlow": np.sum(intensity[regionmask] >= high)/ np.sum(intensity[regionmask] <= low),
         "hc_area_ec_area": np.sum(intensity[regionmask] >= hc) / np.sum(intensity[regionmask] < hc),
         "hc_area_nuc_area": np.sum(intensity[regionmask] >= hc) / np.sum(intensity[regionmask] > 0),
         "hc_content_ec_content": np.sum(np.where(intensity[regionmask] >= hc, intensity[regionmask], 0))
