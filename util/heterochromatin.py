@@ -30,6 +30,17 @@ def hetero_euchro_measures(regionmask: np.ndarray, intensity: np.ndarray, alpha:
     }
     return pd.DataFrame([feat])
 
+def simple_morphology(regionmask: np.ndarray):
+    """ Compute image moments
+    Args:
+        regionmask : binary background mask
+    """
+    morphology_features = ['area','major_axis_length','minor_axis_length']
+    regionmask=regionmask.astype('uint8')
+    feat = pd.DataFrame(measure.regionprops_table(regionmask,properties=morphology_features))
+    feat["a_r"] = feat["minor_axis_length"] / feat["major_axis_length"]
+    return feat
+
 def extract_heterochromatin_feature_3D(raw_image,labelled_image,normalize:bool=True):
     if normalize:
         raw_image = cv.normalize(
@@ -46,7 +57,8 @@ def extract_heterochromatin_feature_3D(raw_image,labelled_image,normalize:bool=T
     for i in range(len(props)):
         all_features = pd.concat([all_features,pd.concat(
         [pd.DataFrame([i + 1], columns=["label"]),
-        hetero_euchro_measures(props[i].image, props[i].intensity_image).reset_index(drop=True)
+        hetero_euchro_measures(props[i].image, props[i].intensity_image).reset_index(drop=True),
+         simple_morphology(props[i].image).reset_index(drop=True)
         ],axis=1,
         )],axis=0,ignore_index=True)
     return all_features
