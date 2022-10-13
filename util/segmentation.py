@@ -10,7 +10,7 @@ def read_nd2_3D(filename):
   Args:
     filename: Name of the image file.
   Returns:
-    An OpenSlide object representing a whole-slide image.
+    An numpy ndarray.
   """
   try:
     img = ND2Reader(filename)
@@ -28,7 +28,7 @@ def read_tif_3D(filename):
   Args:
     filename: Name of the image file.
   Returns:
-    An OpenSlide object representing a whole-slide image.
+    An numpy ndarray.
   """
   try:
     img = io.imread(img_file_name)
